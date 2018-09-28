@@ -1,0 +1,32 @@
+.brick-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+.claim-brick-button {
+    height: 45px;
+    width: 110px;
+    border-radius: 6px;
+    border: 1px solid #000;
+    background-color: #5BC6E8;
+    color: #000;
+}
+
+.claim-brick-button:hover {
+    background-color: #0039A6;
+    color: #fff;
+}
+
+input {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+textarea {
+    width: 99.5%;
+    margin-bottom: 10px;
+    padding-bottom: 100px;
+    resize: none;
+}
