@@ -17,9 +17,25 @@
             <img class="utd-small-logo" src="../media/utd-monogram-circle-solid.png" alt="UT Dallas">
         </picture>
     </header>
-    <video class="embedded-homepage-video" autoplay muted loop>
-        <source src="../media/Legacy-Lane.mp4" type="video/mp4">
-    </video>
+    <div class="homepage-center-content mobile-homepage">
+        <video class="embedded-homepage-video" autoplay muted loop>
+            <source src="../media/Legacy-Lane.mp4" type="video/mp4">
+        </video>
+        <div class="homepage-search-bar mobile-homepage-search-bar">
+            <input class="homepage-search-text mobile-homepage-search-text" type="text" placeholder="Find your brick">
+            <button type="submit" class="homepage-search-icon mobile-homepage-search-icon"><img src="../media/search-glass.png"/></button>
+        </div>
+    </div>
+
+    <script>
+        var link = document.querySelector('link[rel="import"]');
+        var content = link.import;
+
+        var el = content.querySelector('footer');
+
+        document.body.appendChild(el.cloneNode(true));
+    </script>
+    <div link="footer.html"></div>
 </homepage>
 </body>
 </html>

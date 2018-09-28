@@ -39,16 +39,86 @@
     margin: 0 80px 0 210px;
     z-index: 1;
 }
+/*End of Header Stuff*/
+/*Homepage stuff*/
+.homepage-center-content {
+    position:relative;
+
+    top: -150px !important;
+    margin-bottom: -155px !important;
+}
+@media only screen and (max-width: 600px){
+    .mobile-homepage {
+        text-align: right;
+    }
+    .mobile-homepage-search-text {
+        padding-left: 10px;
+        width: 30%;
+        height: 30px !important;
+        border: 0 !important;
+    }
+    .mobile-homepage-search-bar {
+        text-align: center !important;
+        width: 100% !important;
+        z-index: 1 !important;
+        padding: 0;
+        position: absolute;
+        top: 50% !important;
+        left: 0 !important;
+        min-width: 100px;
+        height: 30px !important;
+        border: 2px;
+    }
+    .mobile-homepage-search-icon {
+        z-index: 2 !important;
+        background-color: black;
+        border: 5px;
+        width: 45px;
+        height: 32px !important;
+        top: 8px;
+        vertical-align: bottom;
+        margin-left: -4px;
+    }
+}
+@media only screen and (min-width: 600px) {
+    .homepage-search-bar {
+        text-align: center !important;
+        width: 100% !important;
+        z-index: 1 !important;
+        padding: 0;
+        position: absolute;
+        top: 50% !important;
+        left: 0 !important;
+        min-width: 100px;
+        height: 30px !important;
+        border: 2px;
+    }
+    .homepage-search-text {
+        padding-left: 10px;
+        width: 30%;
+        height: 30px !important;
+        border: 0 !important;
+    }
+
+    .homepage-search-icon {
+        z-index: 2 !important;
+        background-color: rgb(213, 210, 202);
+        border: 0;
+        width: 45px;
+        height: 32px !important;
+        top: 8px;
+        vertical-align: bottom;
+        margin-left: -4px;
+    }
+}
 .embedded-homepage-video {
     width: 100% !important;
     height: auto !important;
     margin: 0;
     padding: 0;
     position: relative;
-    top: -150px !important;
-    margin-bottom: -155px !important;
 }
-/*End of Header Stuff*/
+/*End of Homepage stuff*/
 /*Footer elements*/
 .footer {
     padding: 30px 0 80px 0;
