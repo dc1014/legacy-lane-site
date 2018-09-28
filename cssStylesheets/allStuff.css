@@ -197,6 +197,7 @@
     padding: 0;
     position: relative;
 }
+/*End of Homepage stuff*/
 
 @media only screen and (max-width: 600px) {
     .col-s-1 {width: 8.33%;}
