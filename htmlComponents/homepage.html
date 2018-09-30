@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" type="text/css" href="../cssStylesheets/allStuff.css"/>
+    <link rel="stylesheet" type="text/css" href="../cssStylesheets/homepage.css"/>
     <link rel="import" type="text/html" href="footer.html"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -14,29 +15,30 @@
         <div class="nav">
             <p class="legacy-lane-title">Legacy&nbsp;Lane Experience</p>
         </div>
-        <picture class="utd-small-logo-container">
-            <img class="utd-small-logo" src="../media/utd-monogram-circle-solid.png" alt="UT Dallas">
+        <picture class="utd-small-logo-container col-s-12">
+            <img class="utd-small-logo col-s-3" src="../media/utd-monogram-circle-solid.png" alt="UT Dallas">
         </picture>
     </header>
-    <div class="homepage-center-content">
+    <div class="col-l-12 col-s-12 col-m-12 homepage-center-content homepage-mobile-center-content">
         <video class="embedded-homepage-video" autoplay muted loop>
             <source src="../media/Legacy-Lane.mp4" type="video/mp4">
         </video>
-        <div class="homepage-search-bar mobile-homepage-search-bar">
+        <div class="col-s-12 col-m-12 col-l-12 homepage-search-bar mobile-homepage-search-bar">
+            <p class="mobile-search-desc">Ready to customize your brick?</p>
             <input class="homepage-search-text mobile-homepage-search-text" type="text" placeholder="Find your brick">
             <button type="submit" class="homepage-search-icon mobile-homepage-search-icon"><img src="../media/search-glass.png"/></button>
         </div>
     </div>
 
-    <script>
-        var link = document.querySelector('link[rel="import"]');
-        var content = link.import;
+    <!--<script>-->
+        <!--var link = document.querySelector('link[rel="import"]');-->
+        <!--var content = link.import;-->
 
-        var el = content.querySelector('footer');
+        <!--var el = content.querySelector('footer');-->
 
-        document.body.appendChild(el.cloneNode(true));
-    </script>
-    <div link="footer.html"></div>
+        <!--document.body.appendChild(el.cloneNode(true));-->
+    <!--</script>-->
+    <!--<div link="footer.html"></div>-->
 </homepage>
 </body>
 </html>
