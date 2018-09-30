@@ -32,7 +32,6 @@
         text-align: center !important;
         width: 100% !important;
         z-index: 1 !important;
-        padding: 30% 100%;
         left: 0 !important;
         min-width: 100px;
         height: 40px !important;
@@ -100,5 +99,4 @@
         height: 0;
         margin: 0;
     }
-    /*End of Homepage stuff*/
 }
