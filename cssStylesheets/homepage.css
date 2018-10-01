@@ -3,6 +3,7 @@
     visibility: hidden;
     height: 0;
     margin: 0;
+    font-family: "din-2014", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 .homepage-center-content {
     position:relative;
