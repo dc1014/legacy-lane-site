@@ -1,0 +1,13 @@
+@import url('../brick-page/brick-page.component.css');
+
+input {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+textarea {
+    width: 99.5%;
+    margin-bottom: 10px;
+    padding-bottom: 100px;
+    resize: none;
+}
