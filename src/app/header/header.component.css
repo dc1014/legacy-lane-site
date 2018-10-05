@@ -12,7 +12,7 @@
     .mobile-search-text {
         padding-left: 10px;
         width: 75%;
-        height: 34px !important;
+        height: 30px !important;
         vertical-align: bottom;
     }
 
@@ -43,7 +43,7 @@
     .search-text {
         padding-left: 10px;
         width: 50%;
-        height: 34px !important;
+        height: 30px !important;
     }
 
     .search-icon {
@@ -78,7 +78,7 @@
     .search-text {
         padding-left: 10px;
         width: 50%;
-        height: 34px !important;
+        height: 30px !important;
     }
     .search-icon {
         z-index: 2 !important;

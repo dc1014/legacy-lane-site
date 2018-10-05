@@ -1,11 +1,4 @@
 /*Index elements*/
-* {
-    box-sizing: border-box;
-}
-
-*:before, *:after {
-    box-sizing: border-box;
-}
 
 html, body {
     height: 100%;
@@ -16,13 +9,13 @@ body {
     margin: 0;
 }
 
-.main-container {
-    min-height: 100vh; /* will cover the 100% of viewport */
-    overflow: hidden;
-    display: block;
-    position: relative;
-    padding-bottom: 35px; /* height of your footer */
-}
+/*.main-container {*/
+    /*min-height: 100vh; !* will cover the 100% of viewport *!*/
+    /*overflow: hidden;*/
+    /*display: block;*/
+    /*position: relative;*/
+    /*padding-bottom: 35px; !* height of your footer *!*/
+/*}*/
 /*End of Index elements*/
 
 /*Header elements*/
@@ -144,10 +137,10 @@ body {
     /*Header elements*/
     .utd-small-logo-container {
         background-color: #C75B12;
-        padding: 120px 0 0 0 !important;
+        padding: 180px 0 0 0 !important;
         position: relative;
         left: 80px;
-        top: -240px;
+        top: -120px;
         z-index: 1;
     }
 
@@ -197,10 +190,10 @@ body {
     /*Header elements*/
     .utd-small-logo-container {
         background-color: #C75B12;
-        padding: 120px 0 0 0 !important;
+        padding: 150px 0 0 0 !important;
         position: relative;
         left: 80px;
-        top: -240px;
+        top: -120px;
         z-index: 1;
     }
 
