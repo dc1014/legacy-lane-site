@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/dc1014/legacy-lane-site#readme",
   "dependencies": {
-    "hapi": "17.6.0"
+    "hapi": "17.6.0",
+    "inert": "5.1.0"
   }
 }
