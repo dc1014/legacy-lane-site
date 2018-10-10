@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "lint": "./node_modules/.bin/eslint index.js"
+    "lint": "./node_modules/.bin/eslint index.js plugins"
   },
   "pre-commit": [
     "lint"
@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/dc1014/legacy-lane-site#readme",
   "dependencies": {
+    "glue": "5.0.0",
     "hapi": "17.6.0",
     "inert": "5.1.0"
   },
