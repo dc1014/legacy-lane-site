@@ -15,7 +15,8 @@ module.exports = {
             plugins: [
                 'inert',
                 { plugin: './example' },
-                { plugin: require('hapi-mongodb'), options: dbOpts }
+                { plugin: require('hapi-mongodb'), options: dbOpts },
+                { plugin: './../routes/brick' }
             ],
             options: {
                 once: true
