@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "lint": "./node_modules/.bin/eslint index.js plugins"
+    "lint": "./node_modules/.bin/eslint index.js plugins models"
   },
   "pre-commit": [
     "lint"
@@ -25,7 +25,8 @@
     "glue": "5.0.0",
     "hapi": "17.6.0",
     "hapi-mongodb": "7.1.0",
-    "inert": "5.1.0"
+    "inert": "5.1.0",
+    "joi": "13.7.0"
   },
   "devDependencies": {
     "eslint": "5.6.1",
