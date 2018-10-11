@@ -1,7 +1,5 @@
-const { mongoUser, mongoPass, mongoUrl } = require('./../creds.json');
-
 const dbOpts = {
-    url: `mongodb://${mongoUser}:${mongoPass}@${mongoUrl}`,
+    url: `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}`,
     settings: {
         poolSize: 10
     },

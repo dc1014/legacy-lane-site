@@ -23,6 +23,7 @@
   "homepage": "https://github.com/dc1014/legacy-lane-site#readme",
   "dependencies": {
     "boom": "7.2.0",
+    "dotenv": "6.1.0",
     "glue": "5.0.0",
     "hapi": "17.6.0",
     "hapi-mongodb": "7.1.0",
