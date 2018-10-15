@@ -4,7 +4,7 @@ const register = function (server, options) {
 
     server.route({
         method: 'GET',
-        path: '/bricks',
+        path: '/v1/bricks',
         async handler(request) {
 
             const db = request.mongo.db;
@@ -21,7 +21,7 @@ const register = function (server, options) {
 
     server.route({
         method: 'GET',
-        path: '/bricks/{id}',
+        path: '/v1/bricks/{id}',
         async handler(request) {
 
             const db = request.mongo.db;

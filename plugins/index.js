@@ -14,7 +14,12 @@ module.exports = {
                 'inert',
                 { plugin: './example' },
                 { plugin: require('hapi-mongodb'), options: dbOpts },
-                { plugin: './../routes/brick' }
+                { plugin: './../routes/brick', routes: { prefix: '/api' } },
+                { plugin: require('hapi-api-version'), options: {
+                    validVersions: [1],
+                    defaultVersion: 1,
+                    vendorName: 'Legacy Lane'
+                } }
             ],
             options: {
                 once: true

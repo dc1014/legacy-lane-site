@@ -26,6 +26,7 @@
     "dotenv": "6.1.0",
     "glue": "5.0.0",
     "hapi": "17.6.0",
+    "hapi-api-version": "2.1.0",
     "hapi-mongodb": "7.1.0",
     "inert": "5.1.0",
     "joi": "13.7.0"
