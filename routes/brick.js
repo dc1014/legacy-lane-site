@@ -8,9 +8,18 @@ const register = function (server, options) {
         async handler(request) {
 
             const db = request.mongo.db;
+            let result;
 
             try {
-                const result = await db.collection('bricks').find({}).toArray();
+                if (request.query) {
+                    result = await db.collection('bricks').find({
+                        $text: { $search: request.query.q }
+                    }).toArray();
+                }
+                else {
+                    result = await db.collection('bricks').find({}).toArray();
+                }
+
                 return result;
             }
             catch (err) {
