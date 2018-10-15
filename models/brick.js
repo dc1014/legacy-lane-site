@@ -4,6 +4,7 @@ const collection = 'bricks';
 
 const schema = Joi.object().keys({
     classOf: Joi.number().positive().integer(),
+    constituentId: Joi.string(),
     comment: Joi.string(),
     email: Joi.string().email(),
     firstName: Joi.string(),
