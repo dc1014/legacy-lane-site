@@ -11,7 +11,7 @@ const register = function (server, options) {
             let result;
 
             try {
-                if (request.query) {
+                if (request.query.q) {
                     result = await db.collection('bricks').find({
                         $text: { $search: request.query.q }
                     }).toArray();
