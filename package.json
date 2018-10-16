@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "lint": "./node_modules/.bin/eslint index.js plugins models routes"
+    "lint": "./node_modules/.bin/eslint index.js plugins models routes methods"
   },
   "pre-commit": [
     "lint"

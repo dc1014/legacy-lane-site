@@ -9,18 +9,20 @@ const register = function (server, options) {
 
             const db = request.mongo.db;
             let result;
+            const term = request.query.q || '';
 
             try {
-                if (request.query.q) {
-                    result = await db.collection('bricks').find({
-                        $text: { $search: request.query.q }
+                if (term) {
+                    result = await db.collection('bricks').find({ $or: [{
+                        $text: { $search: term }
+                    }, { tags: term }]
                     }).toArray();
                 }
                 else {
                     result = await db.collection('bricks').find({}).toArray();
                 }
 
-                return result;
+                return server.methods.redactMap(result, term);
             }
             catch (err) {
                 throw Boom.internal('Internal MongoDB error', err);
@@ -38,7 +40,7 @@ const register = function (server, options) {
 
             try {
                 const result = await db.collection('bricks').findOne({ _id: new ObjectID(request.params.id) });
-                return result;
+                return server.methods.redact(result);
             }
             catch (err) {
                 throw Boom.internal('Internal MongoDB error', err);

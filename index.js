@@ -16,6 +16,18 @@ const init = async function () {
             }
         });
 
+        server.method({
+            name: 'redactMap',
+            method: require('./methods/redact').redactMap,
+            options: {}
+        });
+
+        server.method({
+            name: 'redact',
+            method: require('./methods/redact').redact,
+            options: {}
+        });
+
         await server.start();
         console.log(`Server running at: ${server.info.uri}`);
     }
