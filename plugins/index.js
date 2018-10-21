@@ -11,6 +11,7 @@ module.exports = {
         server: { port: process.env.PORT || 3000 },
         register: {
             plugins: [
+                { plugin: require('hapi-auth-basic') },
                 'inert',
                 { plugin: './example' },
                 { plugin: require('hapi-mongodb'), options: dbOpts },
