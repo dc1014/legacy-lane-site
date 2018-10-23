@@ -2,6 +2,8 @@ const Joi = require('joi');
 
 const collection = 'bricks';
 
+const { schema: request } = require('./request.js');
+
 const schema = Joi.object().keys({
     classOf: Joi.number().positive().integer(),
     comment: Joi.string().required(),
@@ -21,7 +23,8 @@ const schema = Joi.object().keys({
         ]
     }),
     optIn: Joi.boolean(),
-    tags: Joi.array().items(Joi.string()).required()
+    request,
+    tags: Joi.array().items(Joi.string()).default([], 'empty tags array')
 });
 
 module.exports = { collection, schema };

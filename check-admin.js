@@ -14,7 +14,7 @@ const password = process.env.LOCAL_ADMIN;
   // Connection URL
   const url = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}`;
   // Database Name
-  const dbName = 'heroku_4mhwk498';
+  const dbName = process.env.DB_NAME;
   const client = new MongoClient(url);
 
   try {
