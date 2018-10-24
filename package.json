@@ -2,6 +2,9 @@
   "name": "legacy-lane-site",
   "version": "0.0.1",
   "description": "Virtual tour app written in Hapi.JS / Angular",
+  "engines": {
+    "node": ">=10.11.0"
+  },
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
