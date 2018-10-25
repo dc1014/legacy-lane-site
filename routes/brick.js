@@ -49,7 +49,6 @@ const register = function (server, options) {
             }
         }
     });
-
     server.route({
         method: 'POST',
         path: '/v1/bricks',
@@ -61,14 +60,26 @@ const register = function (server, options) {
             try {
                 const result = await db.collection('bricks').insert(request.payload);
                 return result.ops;
-            }
-            catch (err) {
-                throw Boom.internal('Internal MongoDB error', err);
-            }
-        },
+            },
         options: {
             validate: {
                 payload: brickSchema
+            }
+        }
+    });
+    server.route({
+        method: 'DELETE',
+        path: '/v1/bricks/{id}',
+        async handler(request) {
+
+            const db = request.mongo.db;
+            const ObjectID = request.mongo.ObjectID;
+
+            try {
+                return await db.collection('bricks').deleteOne({ _id: new ObjectID(request.params.id) });
+            }
+            catch (err) {
+                throw Boom.internal('Internal MongoDB error', err);
             }
         }
     });
