@@ -14,16 +14,19 @@ const register = function (server, options) {
             const db = request.mongo.db;
             let result;
             const term = request.query.q || '';
+            const skip = parseInt(request.query.s) || 0;
+            const limit = parseInt(request.query.l) <= 10 ? parseInt(request.query.l) : 10;
 
             try {
                 if (term) {
                     result = await db.collection('bricks').find({ $or: [{
                         $text: { $search: term }
                     }, { tags: term }]
-                    }).toArray();
+                    }).skip(skip).limit(limit).toArray();
                 }
                 else {
-                    result = await db.collection('bricks').find({}).toArray();
+                    result = await db.collection('bricks').find().skip(skip).limit(limit).toArray();
+                    return result;
                 }
 
                 return server.methods.redactMap(result, term);
