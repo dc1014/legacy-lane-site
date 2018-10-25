@@ -1,3 +1,4 @@
+const Joi = require('joi');
 const { schema: brickSchema } = require('./../models/brick.js');
 const { schema: claimSchema } = require('./../models/claim.js');
 
@@ -128,6 +129,30 @@ const register = function (server, options) {
         options: {
             response: {
                 schema: claimSchema
+            }
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/v1/bricks/claims',
+
+        async handler(request) {
+
+            const db = request.mongo.db;
+
+            try {
+                const result = await db.collection('bricks').find({ claim: { $exists: true } }).toArray();
+
+                return result;
+            }
+            catch (err) {
+                throw Boom.internal('Internal MongoDB error', err);
+            }
+        },
+        options: {
+            response: {
+                schema: Joi.array().items(brickSchema)
             }
         }
     });
