@@ -14,8 +14,7 @@ const register = function (server, options) {
             const db = request.mongo.db;
             let result;
             const term = request.query.q || '';
-            const skip = parseInt(request.query.s) || 0;
-            const limit = parseInt(request.query.l) <= 10 ? parseInt(request.query.l) : 10;
+            const { skip, limit } = server.methods.skipLimit(request.query.s, request.query.l);
 
             try {
                 if (term) {
@@ -143,9 +142,10 @@ const register = function (server, options) {
         async handler(request) {
 
             const db = request.mongo.db;
+            const { skip, limit } = server.methods.skipLimit(request.query.s, request.query.l);
 
             try {
-                const result = await db.collection('bricks').find({ claim: { $exists: true } }).toArray();
+                const result = await db.collection('bricks').find({ claim: { $exists: true } }).skip(skip).limit(limit).toArray();
 
                 return result;
             }
@@ -195,9 +195,10 @@ const register = function (server, options) {
         async handler(request) {
 
             const db = request.mongo.db;
+            const { skip, limit } = server.methods.skipLimit(request.query.s, request.query.l);
 
             try {
-                const result = await db.collection('approvals').find().toArray();
+                const result = await db.collection('approvals').find().skip(skip).limit(limit).toArray();
 
                 return result;
             }

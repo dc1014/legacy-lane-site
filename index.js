@@ -34,6 +34,12 @@ const init = async function () {
             options: {}
         });
 
+        server.method({
+            name: 'skipLimit',
+            method: require('./methods/skip-limit').skipLimit,
+            options: {}
+        });
+
         await server.start();
         console.log(`Server running at: ${server.info.uri}`);
     }
