@@ -2,7 +2,7 @@ const Joi = require('joi');
 
 const collection = 'bricks';
 
-const { schema: request } = require('./request.js');
+const { schema: claim } = require('./claim.js');
 
 const schema = Joi.object().keys({
     classOf: Joi.number().positive().integer(),
@@ -23,7 +23,7 @@ const schema = Joi.object().keys({
         ]
     }),
     optIn: Joi.boolean(),
-    request: request.optional(),
+    claim: claim.optional(),
     tags: Joi.array().items(Joi.string()).default([], 'empty tags array')
 });
 

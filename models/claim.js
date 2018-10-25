@@ -1,6 +1,6 @@
 const Joi = require('joi');
 
-const collection = 'requests';
+const collection = 'claims';
 
 const schema = Joi.object().keys({
     approved: Joi.boolean(),
@@ -15,6 +15,6 @@ const schema = Joi.object().keys({
     user: Joi.string(),
     optIn: Joi.boolean().default(false),
     userTimeStamp: Joi.date().timestamp().default(Date.now, 'user action date')
-}).without('createdTimeStamp', ['approvalTimeStamp']);
+}).without('createdTimeStamp', ['approvalTimeStamp', 'approved', 'deleted', 'user', 'userTimeStamp']);
 
 module.exports = { collection, schema };

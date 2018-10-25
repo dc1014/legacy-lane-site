@@ -1,5 +1,9 @@
 const redact = function (brick) {
 
+    if (brick.claim) {
+        delete brick.claim;
+    }
+
     if (brick.optIn === true) {
         return brick;
     }
