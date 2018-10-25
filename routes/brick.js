@@ -60,9 +60,9 @@ const register = function (server, options) {
             try {
                 const result = await db.collection('bricks').insert(request.payload);
                 return result.ops;
-            }	            },
-            catch (err) {	
-                throw Boom.internal('Internal MongoDB error', err);	
+            }
+            catch (err) {
+                throw Boom.internal('Internal MongoDB error', err);
             }
         },
         options: {
