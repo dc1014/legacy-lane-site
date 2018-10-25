@@ -131,6 +131,34 @@ const register = function (server, options) {
             }
         }
     });
+
+    server.route({
+        method: 'POST',
+        path: '/v1/bricks/{id}/approvals',
+
+        async handler(request) {
+
+            const db = request.mongo.db;
+            const ObjectID = request.mongo.ObjectID;
+
+            request.payload.brickId = new ObjectID(request.params.id);
+            request.payload.brick = JSON.parse(request.payload.brick);
+
+            try {
+                await db.collection('bricks').updateOne(
+                    { _id: new ObjectID(request.params.id) },
+                    { $set: request.payload.brick, $unset: { claim: '' } }
+                );
+
+                const approval = await db.collection('approvals').insert(request.payload);
+
+                return approval.ops;
+            }
+            catch (err) {
+                throw Boom.internal('Internal MongoDB error', err);
+            }
+        }
+    });
 };
 
 module.exports = {
