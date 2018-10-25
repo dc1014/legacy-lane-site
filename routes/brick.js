@@ -184,6 +184,25 @@ const register = function (server, options) {
             }
         }
     });
+
+    server.route({
+        method: 'GET',
+        path: '/v1/bricks/{id}/approvals',
+
+        async handler(request) {
+
+            const db = request.mongo.db;
+
+            try {
+                const result = await db.collection('approvals').find().toArray();
+
+                return result;
+            }
+            catch (err) {
+                throw Boom.internal('Internal MongoDB error', err);
+            }
+        }
+    });
 };
 
 module.exports = {
