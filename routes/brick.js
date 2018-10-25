@@ -118,19 +118,37 @@ const register = function (server, options) {
 
             try {
                 const result = await db.collection('bricks').findOne(
-                    { _id: new ObjectID(request.params.id) },
+                    { _id: new ObjectID(request.params.id), claim: { $exists: 1 } },
                     { _id: 0 }
                 );
 
-                return result.claim;
+                return result;
             }
             catch (err) {
                 throw Boom.internal('Internal MongoDB error', err);
             }
-        },
-        options: {
-            response: {
-                schema: claimSchema
+        }
+    });
+
+    server.route({
+        method: 'DELETE',
+        path: '/v1/bricks/{id}/claim',
+
+        async handler(request) {
+
+            const db = request.mongo.db;
+            const ObjectID = request.mongo.ObjectID;
+
+            try {
+                const result = await db.collection('bricks').updateOne(
+                    { _id: new ObjectID(request.params.id) },
+                    { $unset: { claim: '' } }
+                );
+
+                return result;
+            }
+            catch (err) {
+                throw Boom.internal('Internal MongoDB error', err);
             }
         }
     });
