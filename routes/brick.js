@@ -1,4 +1,5 @@
 const { schema: brickSchema } = require('./../models/brick.js');
+const { schema: claimSchema } = require('./../models/claim.js');
 
 const Boom = require('boom');
 
@@ -69,6 +70,64 @@ const register = function (server, options) {
         options: {
             validate: {
                 payload: brickSchema
+            }
+        }
+    });
+
+    server.route({
+        method: 'PUT',
+        path: '/v1/bricks/{id}/claim',
+
+        async handler(request) {
+
+            const db = request.mongo.db;
+            const ObjectID = request.mongo.ObjectID;
+
+            try {
+                await db.collection('bricks').updateOne(
+                    { _id: new ObjectID(request.params.id) },
+                    { $set: { claim: request.payload } }
+                );
+                return request.payload;
+            }
+            catch (err) {
+                throw Boom.internal('Internal MongoDB error', err);
+            }
+        },
+        options: {
+            validate: {
+                payload: claimSchema
+            },
+            response: {
+                schema: claimSchema
+            }
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/v1/bricks/{id}/claim',
+
+        async handler(request) {
+
+            const db = request.mongo.db;
+            const ObjectID = request.mongo.ObjectID;
+
+            try {
+                const result = await db.collection('bricks').findOne(
+                    { _id: new ObjectID(request.params.id) },
+                    { _id: 0 }
+                );
+
+                return result.claim;
+            }
+            catch (err) {
+                throw Boom.internal('Internal MongoDB error', err);
+            }
+        },
+        options: {
+            response: {
+                schema: claimSchema
             }
         }
     });

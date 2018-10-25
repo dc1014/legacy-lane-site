@@ -5,6 +5,8 @@ const collection = 'bricks';
 const { schema: claim } = require('./claim.js');
 
 const schema = Joi.object().keys({
+    _id: Joi.object(),
+    claim: claim.optional(),
     classOf: Joi.number().positive().integer(),
     comment: Joi.string().required(),
     email: Joi.string().email().lowercase(),
@@ -23,7 +25,6 @@ const schema = Joi.object().keys({
         ]
     }),
     optIn: Joi.boolean(),
-    claim: claim.optional(),
     tags: Joi.array().items(Joi.string()).default([], 'empty tags array')
 });
 

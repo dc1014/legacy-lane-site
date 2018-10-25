@@ -9,7 +9,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "lint": "./node_modules/.bin/eslint index.js plugins models routes methods"
+    "lint": "./node_modules/.bin/eslint index.js plugins models routes methods",
+    "go": "nodemon index.js"
   },
   "pre-commit": [
     "lint"
@@ -41,6 +42,7 @@
     "eslint-config-hapi": "12.0.0",
     "eslint-plugin-hapi": "4.1.0",
     "mongodb": "3.1.8",
+    "nodemon": "1.18.4",
     "pre-commit": "1.2.2"
   }
 }
