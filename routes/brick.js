@@ -1,3 +1,5 @@
+const { schema: brickSchema } = require('./../models/brick.js');
+
 const Boom = require('boom');
 
 const register = function (server, options) {
@@ -44,6 +46,28 @@ const register = function (server, options) {
             }
             catch (err) {
                 throw Boom.internal('Internal MongoDB error', err);
+            }
+        }
+    });
+    server.route({
+        method: 'POST',
+        path: '/v1/bricks',
+
+        async handler(request) {
+
+            const db = request.mongo.db;
+
+            try {
+                const result = await db.collection('bricks').insert(request.payload);
+                return result.ops;
+            }
+            catch (err) {
+                throw Boom.internal('Internal MongoDB error', err);
+            }
+        },
+        options: {
+            validate: {
+                payload: brickSchema
             }
         }
     });
