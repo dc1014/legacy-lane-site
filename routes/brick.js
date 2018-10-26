@@ -1,4 +1,3 @@
-const Joi = require('joi');
 const { schema: brickSchema } = require('./../models/brick.js');
 const { schema: claimSchema } = require('./../models/claim.js');
 
@@ -25,7 +24,6 @@ const register = function (server, options) {
                 }
                 else {
                     result = await db.collection('bricks').find().skip(skip).limit(limit).toArray();
-                    return result;
                 }
 
                 return server.methods.redactMap(result, term);
@@ -160,19 +158,23 @@ const register = function (server, options) {
 
             const db = request.mongo.db;
             const { skip, limit } = server.methods.skipLimit(request.query.s, request.query.l);
+            const term = request.query.q || '';
+            let result;
 
             try {
-                const result = await db.collection('bricks').find({ claim: { $exists: true } }).skip(skip).limit(limit).toArray();
+                if (term) {
+
+                    result = await db.collection('bricks').find({ $and: [{ $text: { $search: term } }, { claim: { $exists: true } }] }).skip(skip).limit(limit).toArray();
+                }
+                else {
+
+                    result = await db.collection('bricks').find({ claim: { $exists: true } }).skip(skip).limit(limit).toArray();
+                }
 
                 return result;
             }
             catch (err) {
                 throw Boom.internal('Internal MongoDB error', err);
-            }
-        },
-        options: {
-            response: {
-                schema: Joi.array().items(brickSchema)
             }
         }
     });
