@@ -8,7 +8,7 @@ const dbOpts = {
 
 module.exports = {
     manifest: {
-        server: { port: process.env.PORT || 3000 },
+        server: { port: process.env.PORT || 3000, routes: { cors: true } },
         register: {
             plugins: [
                 { plugin: require('hapi-auth-basic') },
