@@ -215,10 +215,40 @@ const register = function (server, options) {
         async handler(request) {
 
             const db = request.mongo.db;
+            const ObjectID = request.mongo.ObjectID;
             const { skip, limit } = server.methods.skipLimit(request.query.s, request.query.l);
+            const term = request.query.q || '';
+            const brickId = new ObjectID(request.params.id);
+            let result;
 
             try {
-                const result = await db.collection('approvals').find().skip(skip).limit(limit).toArray();
+                if (term) {
+                    result = await db.collection('approvals').find({ brickId, $text: { $search: term } }).skip(skip).limit(limit).toArray();
+                }
+                else {
+                    result = await db.collection('approvals').find({ brickId }).skip(skip).limit(limit).toArray();
+                }
+
+                return result;
+            }
+            catch (err) {
+                throw Boom.internal('Internal MongoDB error', err);
+            }
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/v1/bricks/{id}/approvals/{approvalId}',
+
+        async handler(request) {
+
+            const db = request.mongo.db;
+            const ObjectID = request.mongo.ObjectID;
+            const approvalId = new ObjectID(request.params.approvalId);
+
+            try {
+                const result = await db.collection('approvals').findOne({ _id: approvalId });
 
                 return result;
             }
