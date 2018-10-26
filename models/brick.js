@@ -7,17 +7,17 @@ const { schema: claim } = require('./claim.js');
 const schema = Joi.object().keys({
     _id: Joi.object(),
     claim: claim.optional(),
-    classOf: Joi.number().positive().integer(),
-    comment: Joi.string().required(),
-    email: Joi.string().email().lowercase(),
-    firstName: Joi.string(),
+    classOf: Joi.number().positive().integer(), // searchable, redactable
+    comment: Joi.string().required(), // searchable
+    email: Joi.string().email().lowercase(), // searchable, redactable
+    firstName: Joi.string(), // searchable, redactable
     giftDate: Joi.date(),
     installedIn: Joi.number().positive().integer(),
-    lastName: Joi.string(),
+    lastName: Joi.string(), // searchable, redactable
     lat: Joi.string(),
-    line1: Joi.string().required(),
-    line2: Joi.string().required().default(''),
-    line3: Joi.string().required().default(''),
+    line1: Joi.string().required(), // searchable
+    line2: Joi.string().required().default(''), // searchable
+    line3: Joi.string().required().default(''), // searchable
     long: Joi.string(),
     image: Joi.string().uri({
         scheme: [
@@ -25,7 +25,7 @@ const schema = Joi.object().keys({
         ]
     }),
     optIn: Joi.boolean(),
-    tags: Joi.array().items(Joi.string()).default([], 'empty tags array')
+    tags: Joi.array().items(Joi.string()).default([], 'empty tags array') // searchable
 });
 
 module.exports = { collection, schema };

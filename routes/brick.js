@@ -86,6 +86,8 @@ const register = function (server, options) {
             const db = request.mongo.db;
             const ObjectID = request.mongo.ObjectID;
 
+            request.payload.ipAdress = request.info.remoteAddress;
+
             try {
                 await db.collection('bricks').updateOne(
                     { _id: new ObjectID(request.params.id) },
@@ -100,9 +102,6 @@ const register = function (server, options) {
         options: {
             validate: {
                 payload: claimSchema
-            },
-            response: {
-                schema: claimSchema
             }
         }
     });
@@ -189,6 +188,7 @@ const register = function (server, options) {
 
             request.payload.brickId = new ObjectID(request.params.id);
             request.payload.brick = JSON.parse(request.payload.brick);
+            request.payload.claim = JSON.parse(request.payload.claim);
 
             try {
                 await db.collection('bricks').updateOne(

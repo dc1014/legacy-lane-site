@@ -1,0 +1,7 @@
+DB_HOST=dburl:port/dbname
+DB_USER=user
+DB_PASS=pass
+LOCAL_ADMIN=local
+DB_NAME=dbname
+DEV=boolean
+DEV_HOST=localhost
