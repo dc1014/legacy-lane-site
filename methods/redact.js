@@ -4,10 +4,20 @@ const redact = function (brick) {
         delete brick.claim;
     }
 
+    if (brick.constituentId) {
+        delete brick.constituentId;
+    }
+
+    if (brick.email) {
+        delete brick.email;
+    }
+
     if (brick.optIn === true) {
         delete brick.optIn;
         return brick;
     }
+
+    delete brick.optIn;
 
     if (brick.firstName) {
         delete brick.firstName;
@@ -15,14 +25,6 @@ const redact = function (brick) {
 
     if (brick.lastName) {
         delete brick.lastName;
-    }
-
-    if (brick.constituentId) {
-        delete brick.constituentId;
-    }
-
-    if (brick.email) {
-        delete brick.email;
     }
 
     if (brick.classOf) {

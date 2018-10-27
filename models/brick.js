@@ -9,6 +9,7 @@ const schema = Joi.object().keys({
     claim: claim.optional(),
     classOf: Joi.number().positive().integer(), // searchable, redactable
     comment: Joi.string().required(), // searchable
+    constituentId: Joi.string(),
     email: Joi.string().email().lowercase(), // searchable, redactable
     firstName: Joi.string(), // searchable, redactable
     giftDate: Joi.date(),
