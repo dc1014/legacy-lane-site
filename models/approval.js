@@ -6,7 +6,7 @@ const { schema: claim } = require('./claim');
 const schema = Joi.object().keys({
     _id: Joi.object(),
     claim, // nested search
-    brickId: Joi.object(), // searchable, private
+    brickId: Joi.object(),
     brick: Joi.object().keys({
         comment: Joi.string(),
         email: Joi.string().email().lowercase(),

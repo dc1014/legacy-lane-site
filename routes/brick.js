@@ -257,6 +257,35 @@ const register = function (server, options) {
             }
         }
     });
+
+    server.route({
+        method: 'GET',
+        path: '/v1/bricks/tags',
+
+        async handler(request) {
+
+            const db = request.mongo.db;
+
+            try {
+                const result = await db.collection('bricks').aggregate([
+                    { $unwind: '$tags' },
+                    { $group: {
+                        _id: '$tags', count: { $sum: 1 }
+                    } },
+                    { $sort: { tags: -1 } },
+                    { $limit: 5 },
+                    { $project: { _id: 0, tag: '$_id' } },
+                    { $group: { _id: null, tags: { $addToSet: '$tag' } } },
+                    { $project: { _id: 0, tags: 1 } }
+                ]).toArray();
+
+                return result[0].tags;
+            }
+            catch (err) {
+                throw Boom.internal('Internal MongoDB error', err);
+            }
+        }
+    });
 };
 
 module.exports = {
