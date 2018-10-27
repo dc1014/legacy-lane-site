@@ -6,10 +6,10 @@ const { schema: claim } = require('./claim.js');
 
 const schema = Joi.object().keys({
     _id: Joi.object(),
-    claim: claim.optional(),
+    claim: claim.optional(), // redacted
     classOf: Joi.number().positive().integer(), // searchable, redactable
     comment: Joi.string().required(), // searchable
-    constituentId: Joi.string(),
+    constituentId: Joi.string(), // redacted
     email: Joi.string().email().lowercase(), // searchable, redactable
     firstName: Joi.string(), // searchable, redactable
     giftDate: Joi.date(),
@@ -25,7 +25,7 @@ const schema = Joi.object().keys({
             'https://'
         ]
     }),
-    optIn: Joi.boolean(),
+    optIn: Joi.boolean(), // redacted
     tags: Joi.array().items(Joi.string()).default([], 'empty tags array') // searchable
 });
 

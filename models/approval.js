@@ -7,7 +7,14 @@ const schema = Joi.object().keys({
     _id: Joi.object(),
     claim, // nested search
     brickId: Joi.object(), // searchable, private
-    brick: Joi.object(),
+    brick: Joi.object().keys({
+        comment: Joi.string(),
+        email: Joi.string().email().lowercase(),
+        firstName: Joi.string(),
+        lastName: Joi.string(),
+        optIn: Joi.boolean(),
+        tags: Joi.array().items(Joi.string())
+    }),
     user: Joi.string().lowercase().required() // searchable, private
 });
 
