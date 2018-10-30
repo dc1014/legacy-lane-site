@@ -1,5 +1,6 @@
 const { schema: brickSchema } = require('./../models/brick.js');
 const { schema: claimSchema } = require('./../models/claim.js');
+const Joi = require('joi');
 
 const Boom = require('boom');
 
@@ -48,6 +49,47 @@ const register = function (server, options) {
             }
             catch (err) {
                 throw Boom.internal('Internal MongoDB error', err);
+            }
+        }
+    });
+
+    server.route({
+        method: 'PUT',
+        path: '/v1/bricks/{id}',
+        async handler(request) {
+
+            const db = request.mongo.db;
+            const ObjectID = request.mongo.ObjectID;
+
+            try {
+                const result = await db.collection('bricks').updateOne({ _id: new ObjectID(request.params.id) },
+                    { $set: request.payload });
+                return result;
+            }
+            catch (err) {
+                throw Boom.internal('Internal MongoDB error', err);
+            }
+        },
+        options: {
+            validate: {
+                payload: {
+                    classOf: Joi.number().positive().integer(),
+                    comment: Joi.string(),
+                    constituentId: Joi.string(),
+                    email: Joi.string(),
+                    firstName: Joi.string(),
+                    giftDate: Joi.date(),
+                    image: Joi.string().uri({ scheme: /https:*/ }),
+                    installedIn: Joi.number().positive().integer(),
+                    lastName: Joi.string(),
+                    lat: Joi.string(),
+                    line1: Joi.string(),
+                    line2: Joi.string(),
+                    line3: Joi.string(),
+                    long: Joi.string(),
+                    optIn: Joi.boolean(),
+                    tags: Joi.array().items(Joi.string())
+                }
             }
         }
     });

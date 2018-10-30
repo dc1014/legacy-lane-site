@@ -20,11 +20,7 @@ const schema = Joi.object().keys({
     line2: Joi.string().required().default(''), // searchable
     line3: Joi.string().required().default(''), // searchable
     long: Joi.string(),
-    image: Joi.string().uri({
-        scheme: [
-            'https://'
-        ]
-    }),
+    image: Joi.string().uri({ scheme: /https:*/ }),
     optIn: Joi.boolean(), // redacted
     tags: Joi.array().items(Joi.string()).default([], 'empty tags array') // searchable
 });
