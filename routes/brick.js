@@ -333,5 +333,5 @@ const register = function (server, options) {
 module.exports = {
     name: 'brickRoutes',
     register,
-    version: '0.0.1'
+    version: '0.0.2'
 };
