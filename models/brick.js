@@ -2,11 +2,9 @@ const Joi = require('joi');
 
 const collection = 'bricks';
 
-const { schema: claim } = require('./claim.js');
-
 const schema = Joi.object().keys({
     _id: Joi.object(),
-    claim: claim.optional(), // redacted
+    claim: Joi.object(), // redacted
     classOf: Joi.number().positive().integer(), // searchable, redactable
     comment: Joi.string().required(), // searchable
     constituentId: Joi.string(), // redacted
@@ -15,11 +13,11 @@ const schema = Joi.object().keys({
     giftDate: Joi.date(),
     installedIn: Joi.number().positive().integer(),
     lastName: Joi.string(), // searchable, redactable
-    lat: Joi.string(),
+    lat: Joi.number(),
     line1: Joi.string().required(), // searchable
-    line2: Joi.string().required().default(''), // searchable
-    line3: Joi.string().required().default(''), // searchable
-    long: Joi.string(),
+    line2: Joi.string().default('').allow(''), // searchable
+    line3: Joi.string().default('').allow(''), // searchable
+    long: Joi.number(),
     image: Joi.string().uri({ scheme: /https:*/ }),
     optIn: Joi.boolean(), // redacted
     tags: Joi.array().items(Joi.string()).default([], 'empty tags array') // searchable

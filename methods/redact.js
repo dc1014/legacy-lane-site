@@ -13,7 +13,6 @@ const redact = function (brick) {
     }
 
     if (brick.optIn === true) {
-        delete brick.optIn;
         return brick;
     }
 

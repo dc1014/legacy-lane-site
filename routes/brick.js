@@ -1,5 +1,7 @@
 const { schema: brickSchema } = require('./../models/brick.js');
 const { schema: claimSchema } = require('./../models/claim.js');
+const { schema: approvalSchema } = require('./../models/approval.js');
+
 const Joi = require('joi');
 
 const Boom = require('boom');
@@ -19,7 +21,7 @@ const register = function (server, options) {
             try {
                 if (term) {
                     result = await db.collection('bricks').find({ $or: [{
-                        $text: { $search: term }
+                        $text: { $search: term, $caseSensitive: false }
                     }, { tags: term }]
                     }).skip(skip).limit(limit).toArray();
                 }
@@ -31,6 +33,18 @@ const register = function (server, options) {
             }
             catch (err) {
                 throw Boom.internal('Internal MongoDB error', err);
+            }
+        },
+        options: {
+            validate: {
+                query: {
+                    l: Joi.number().integer().min(1).max(10).default(10),
+                    s: Joi.number().integer().min(0).default(0),
+                    q: Joi.string().optional()
+                }
+            },
+            response: {
+                schema: Joi.array().items(brickSchema)
             }
         }
     });
@@ -50,6 +64,11 @@ const register = function (server, options) {
             catch (err) {
                 throw Boom.internal('Internal MongoDB error', err);
             }
+        },
+        options: {
+            response: {
+                schema: brickSchema
+            }
         }
     });
 
@@ -62,9 +81,13 @@ const register = function (server, options) {
             const ObjectID = request.mongo.ObjectID;
 
             try {
-                const result = await db.collection('bricks').updateOne({ _id: new ObjectID(request.params.id) },
-                    { $set: request.payload });
-                return result;
+                const result = await db.collection('bricks').findOneAndUpdate(
+                    { _id: new ObjectID(request.params.id) },
+                    { $set: request.payload },
+                    { returnOriginal: false }
+                );
+
+                return result.value;
             }
             catch (err) {
                 throw Boom.internal('Internal MongoDB error', err);
@@ -82,14 +105,17 @@ const register = function (server, options) {
                     image: Joi.string().uri({ scheme: /https:*/ }),
                     installedIn: Joi.number().positive().integer(),
                     lastName: Joi.string(),
-                    lat: Joi.string(),
+                    lat: Joi.number(),
                     line1: Joi.string(),
                     line2: Joi.string(),
                     line3: Joi.string(),
-                    long: Joi.string(),
+                    long: Joi.number(),
                     optIn: Joi.boolean(),
                     tags: Joi.array().items(Joi.string())
                 }
+            },
+            response: {
+                schema: brickSchema
             }
         }
     });
@@ -104,7 +130,7 @@ const register = function (server, options) {
 
             try {
                 const result = await db.collection('bricks').insert(request.payload);
-                return result.ops;
+                return result.ops[0];
             }
             catch (err) {
                 throw Boom.internal('Internal MongoDB error', err);
@@ -113,6 +139,9 @@ const register = function (server, options) {
         options: {
             validate: {
                 payload: brickSchema
+            },
+            response: {
+                schema: brickSchema
             }
         }
     });
@@ -129,11 +158,13 @@ const register = function (server, options) {
             request.payload.ipAdress = request.info.remoteAddress;
 
             try {
-                await db.collection('bricks').updateOne(
+                const result = await db.collection('bricks').findOneAndUpdate(
                     { _id: new ObjectID(request.params.id) },
-                    { $set: { claim: request.payload } }
+                    { $set: { claim: request.payload } },
+                    { returnOriginal: false }
                 );
-                return request.payload;
+
+                return result.value;
             }
             catch (err) {
                 throw Boom.internal('Internal MongoDB error', err);
@@ -142,6 +173,9 @@ const register = function (server, options) {
         options: {
             validate: {
                 payload: claimSchema
+            },
+            response: {
+                schema: brickSchema
             }
         }
     });
@@ -166,6 +200,11 @@ const register = function (server, options) {
             catch (err) {
                 throw Boom.internal('Internal MongoDB error', err);
             }
+        },
+        options: {
+            response: {
+                schema: brickSchema
+            }
         }
     });
 
@@ -179,15 +218,21 @@ const register = function (server, options) {
             const ObjectID = request.mongo.ObjectID;
 
             try {
-                const result = await db.collection('bricks').updateOne(
+                const result = await db.collection('bricks').findOneAndUpdate(
                     { _id: new ObjectID(request.params.id) },
-                    { $unset: { claim: '' } }
+                    { $unset: { claim: '' } },
+                    { returnOriginal: false }
                 );
 
-                return result;
+                return result.value;
             }
             catch (err) {
                 throw Boom.internal('Internal MongoDB error', err);
+            }
+        },
+        options: {
+            response: {
+                schema: brickSchema
             }
         }
     });
@@ -206,7 +251,10 @@ const register = function (server, options) {
             try {
                 if (term) {
 
-                    result = await db.collection('bricks').find({ $and: [{ $text: { $search: term } }, { claim: { $exists: true } }] }).skip(skip).limit(limit).toArray();
+                    result = await db.collection('bricks').find({ $and: [
+                        { $text: { $search: term, $caseSensitive: false } },
+                        { claim: { $exists: true }
+                        }] }).skip(skip).limit(limit).toArray();
                 }
                 else {
 
@@ -217,6 +265,18 @@ const register = function (server, options) {
             }
             catch (err) {
                 throw Boom.internal('Internal MongoDB error', err);
+            }
+        },
+        options: {
+            validate: {
+                query: {
+                    l: Joi.number().integer().min(1).max(10).default(10),
+                    s: Joi.number().integer().min(0).default(0),
+                    q: Joi.string().optional()
+                }
+            },
+            response: {
+                schema: Joi.array().items(brickSchema)
             }
         }
     });
@@ -240,12 +300,24 @@ const register = function (server, options) {
                     { $set: request.payload.brick, $unset: { claim: '' } }
                 );
 
-                const approval = await db.collection('approvals').insert(request.payload);
+                const result = await db.collection('approvals').insert(request.payload);
 
-                return approval.ops;
+                return result.ops[0];
             }
             catch (err) {
                 throw Boom.internal('Internal MongoDB error', err);
+            }
+        },
+        options: {
+            validate: {
+                payload: {
+                    brick: Joi.string(),
+                    user: Joi.string().required(),
+                    claim: Joi.string()
+                }
+            },
+            response: {
+                schema: approvalSchema
             }
         }
     });
@@ -276,6 +348,18 @@ const register = function (server, options) {
             catch (err) {
                 throw Boom.internal('Internal MongoDB error', err);
             }
+        },
+        options: {
+            validate: {
+                query: {
+                    l: Joi.number().integer().min(1).max(10).default(10),
+                    s: Joi.number().integer().min(0).default(0),
+                    q: Joi.string().optional()
+                }
+            },
+            response: {
+                schema: Joi.array().items(approvalSchema)
+            }
         }
     });
 
@@ -296,6 +380,11 @@ const register = function (server, options) {
             }
             catch (err) {
                 throw Boom.internal('Internal MongoDB error', err);
+            }
+        },
+        options: {
+            response: {
+                schema: approvalSchema
             }
         }
     });
@@ -325,6 +414,11 @@ const register = function (server, options) {
             }
             catch (err) {
                 throw Boom.internal('Internal MongoDB error', err);
+            }
+        },
+        options: {
+            response: {
+                schema: Joi.array().items(Joi.string())
             }
         }
     });
