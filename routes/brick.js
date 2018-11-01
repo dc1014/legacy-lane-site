@@ -1,12 +1,15 @@
 const { schema: brickSchema } = require('./../models/brick.js');
 const { schema: claimSchema } = require('./../models/claim.js');
 const { schema: approvalSchema } = require('./../models/approval.js');
+const { validate } = require('./../plugins/basic-auth');
 
 const Joi = require('joi');
 
 const Boom = require('boom');
 
 const register = function (server, options) {
+
+    server.auth.strategy('simple', 'basic', { validate });
 
     server.route({
         method: 'GET',
@@ -94,6 +97,7 @@ const register = function (server, options) {
             }
         },
         options: {
+            auth: 'simple',
             validate: {
                 payload: {
                     classOf: Joi.number().positive().integer(),
@@ -137,6 +141,7 @@ const register = function (server, options) {
             }
         },
         options: {
+            auth: 'simple',
             validate: {
                 payload: brickSchema
             },
@@ -171,6 +176,7 @@ const register = function (server, options) {
             }
         },
         options: {
+            auth: 'simple',
             validate: {
                 payload: claimSchema
             },
@@ -202,6 +208,7 @@ const register = function (server, options) {
             }
         },
         options: {
+            auth: 'simple',
             response: {
                 schema: brickSchema
             }
@@ -231,6 +238,7 @@ const register = function (server, options) {
             }
         },
         options: {
+            auth: 'simple',
             response: {
                 schema: brickSchema
             }
@@ -268,6 +276,7 @@ const register = function (server, options) {
             }
         },
         options: {
+            auth: 'simple',
             validate: {
                 query: {
                     l: Joi.number().integer().min(1).max(10).default(10),
@@ -309,6 +318,7 @@ const register = function (server, options) {
             }
         },
         options: {
+            auth: 'simple',
             validate: {
                 payload: {
                     brick: Joi.string(),
@@ -350,6 +360,7 @@ const register = function (server, options) {
             }
         },
         options: {
+            auth: 'simple',
             validate: {
                 query: {
                     l: Joi.number().integer().min(1).max(10).default(10),
@@ -383,6 +394,7 @@ const register = function (server, options) {
             }
         },
         options: {
+            auth: 'simple',
             response: {
                 schema: approvalSchema
             }
@@ -427,5 +439,5 @@ const register = function (server, options) {
 module.exports = {
     name: 'brickRoutes',
     register,
-    version: '0.0.2'
+    version: '0.0.3'
 };

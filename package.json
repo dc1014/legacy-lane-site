@@ -1,6 +1,6 @@
 {
   "name": "legacy-lane-site",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Virtual tour app written in Hapi.JS / Angular",
   "engines": {
     "node": "8.12.0"
