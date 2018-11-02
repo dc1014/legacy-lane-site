@@ -14,31 +14,34 @@ const register = function (server, options) {
     server.route({
         method: 'GET',
         path: '/v1/bricks',
-        async handler(request) {
+        config: {
+            description: 'Get Bricks',
+            notes: 'Returns an array of redacted bricks',
+            tags: ['api', 'Brick'],
+            handler: async function (request) {
 
-            const db = request.mongo.db;
-            let result;
-            const term = request.query.q || '';
-            const { skip, limit } = server.methods.skipLimit(request.query.s, request.query.l);
+                const db = request.mongo.db;
+                let result;
+                const term = request.query.q || '';
+                const { skip, limit } = server.methods.skipLimit(request.query.s, request.query.l);
 
-            try {
-                if (term) {
-                    result = await db.collection('bricks').find({ $or: [{
-                        $text: { $search: term, $caseSensitive: false }
-                    }, { tags: term }]
-                    }).skip(skip).limit(limit).toArray();
+                try {
+                    if (term) {
+                        result = await db.collection('bricks').find({ $or: [{
+                            $text: { $search: term, $caseSensitive: false }
+                        }, { tags: term }]
+                        }).skip(skip).limit(limit).toArray();
+                    }
+                    else {
+                        result = await db.collection('bricks').find().skip(skip).limit(limit).toArray();
+                    }
+
+                    return server.methods.redactMap(result, term);
                 }
-                else {
-                    result = await db.collection('bricks').find().skip(skip).limit(limit).toArray();
+                catch (err) {
+                    throw Boom.internal('Internal MongoDB error', err);
                 }
-
-                return server.methods.redactMap(result, term);
-            }
-            catch (err) {
-                throw Boom.internal('Internal MongoDB error', err);
-            }
-        },
-        options: {
+            },
             validate: {
                 query: {
                     l: Joi.number().integer().min(1).max(10).default(10),
@@ -55,20 +58,23 @@ const register = function (server, options) {
     server.route({
         method: 'GET',
         path: '/v1/bricks/{id}',
-        async handler(request) {
+        config: {
+            description: 'Get Brick',
+            notes: 'Returns a redacted brick',
+            tags: ['api', 'Brick'],
+            handler: async function (request) {
 
-            const db = request.mongo.db;
-            const ObjectID = request.mongo.ObjectID;
+                const db = request.mongo.db;
+                const ObjectID = request.mongo.ObjectID;
 
-            try {
-                const result = await db.collection('bricks').findOne({ _id: new ObjectID(request.params.id) });
-                return server.methods.redact(result);
-            }
-            catch (err) {
-                throw Boom.internal('Internal MongoDB error', err);
-            }
-        },
-        options: {
+                try {
+                    const result = await db.collection('bricks').findOne({ _id: new ObjectID(request.params.id) });
+                    return server.methods.redact(result);
+                }
+                catch (err) {
+                    throw Boom.internal('Internal MongoDB error', err);
+                }
+            },
             response: {
                 schema: brickSchema
             }
@@ -78,25 +84,28 @@ const register = function (server, options) {
     server.route({
         method: 'PUT',
         path: '/v1/bricks/{id}',
-        async handler(request) {
+        config: {
+            description: 'PUT Brick',
+            notes: 'Update a brick',
+            tags: ['api', 'Brick'],
+            handler: async function (request) {
 
-            const db = request.mongo.db;
-            const ObjectID = request.mongo.ObjectID;
+                const db = request.mongo.db;
+                const ObjectID = request.mongo.ObjectID;
 
-            try {
-                const result = await db.collection('bricks').findOneAndUpdate(
-                    { _id: new ObjectID(request.params.id) },
-                    { $set: request.payload },
-                    { returnOriginal: false }
-                );
+                try {
+                    const result = await db.collection('bricks').findOneAndUpdate(
+                        { _id: new ObjectID(request.params.id) },
+                        { $set: request.payload },
+                        { returnOriginal: false }
+                    );
 
-                return result.value;
-            }
-            catch (err) {
-                throw Boom.internal('Internal MongoDB error', err);
-            }
-        },
-        options: {
+                    return result.value;
+                }
+                catch (err) {
+                    throw Boom.internal('Internal MongoDB error', err);
+                }
+            },
             auth: 'simple',
             validate: {
                 payload: {
@@ -127,23 +136,26 @@ const register = function (server, options) {
     server.route({
         method: 'DELETE',
         path: '/v1/bricks/{id}',
-        async handler(request) {
+        config: {
+            description: 'DELETE Brick',
+            notes: 'Delete a brick',
+            tags: ['api', 'Brick'],
+            handler: async function (request) {
 
-            const db = request.mongo.db;
-            const ObjectID = request.mongo.ObjectID;
+                const db = request.mongo.db;
+                const ObjectID = request.mongo.ObjectID;
 
-            try {
-                const result = await db.collection('bricks').deleteOne(
-                    { _id: new ObjectID(request.params.id) },
-                );
+                try {
+                    const result = await db.collection('bricks').deleteOne(
+                        { _id: new ObjectID(request.params.id) },
+                    );
 
-                return result;
-            }
-            catch (err) {
-                throw Boom.internal('Internal MongoDB error', err);
-            }
-        },
-        options: {
+                    return result;
+                }
+                catch (err) {
+                    throw Boom.internal('Internal MongoDB error', err);
+                }
+            },
             auth: 'simple'
         }
     });
@@ -151,20 +163,22 @@ const register = function (server, options) {
     server.route({
         method: 'POST',
         path: '/v1/bricks',
+        config: {
+            description: 'POST Brick',
+            notes: 'Creates a brick',
+            tags: ['api', 'Brick'],
+            handler: async function (request) {
 
-        async handler(request) {
+                const db = request.mongo.db;
 
-            const db = request.mongo.db;
-
-            try {
-                const result = await db.collection('bricks').insert(request.payload);
-                return result.ops[0];
-            }
-            catch (err) {
-                throw Boom.internal('Internal MongoDB error', err);
-            }
-        },
-        options: {
+                try {
+                    const result = await db.collection('bricks').insert(request.payload);
+                    return result.ops[0];
+                }
+                catch (err) {
+                    throw Boom.internal('Internal MongoDB error', err);
+                }
+            },
             auth: 'simple',
             validate: {
                 payload: brickSchema
@@ -178,28 +192,30 @@ const register = function (server, options) {
     server.route({
         method: 'PUT',
         path: '/v1/bricks/{id}/claim',
+        config: {
+            description: 'Create a Claim',
+            notes: 'PUTs a claim on a brick. Used during request approval to update a brick.',
+            tags: ['api', 'Claim'],
+            handler: async function (request) {
 
-        async handler(request) {
+                const db = request.mongo.db;
+                const ObjectID = request.mongo.ObjectID;
 
-            const db = request.mongo.db;
-            const ObjectID = request.mongo.ObjectID;
+                request.payload.ipAdress = request.info.remoteAddress;
 
-            request.payload.ipAdress = request.info.remoteAddress;
+                try {
+                    const result = await db.collection('bricks').findOneAndUpdate(
+                        { _id: new ObjectID(request.params.id) },
+                        { $set: { claim: request.payload } },
+                        { returnOriginal: false }
+                    );
 
-            try {
-                const result = await db.collection('bricks').findOneAndUpdate(
-                    { _id: new ObjectID(request.params.id) },
-                    { $set: { claim: request.payload } },
-                    { returnOriginal: false }
-                );
-
-                return result.value;
-            }
-            catch (err) {
-                throw Boom.internal('Internal MongoDB error', err);
-            }
-        },
-        options: {
+                    return result.value;
+                }
+                catch (err) {
+                    throw Boom.internal('Internal MongoDB error', err);
+                }
+            },
             auth: 'simple',
             validate: {
                 payload: claimSchema
@@ -213,25 +229,27 @@ const register = function (server, options) {
     server.route({
         method: 'GET',
         path: '/v1/bricks/{id}/claim',
+        config: {
+            description: 'Get a Claim',
+            notes: 'Gets a claim on a brick',
+            tags: ['api', 'Claim'],
+            handler: async function (request) {
 
-        async handler(request) {
+                const db = request.mongo.db;
+                const ObjectID = request.mongo.ObjectID;
 
-            const db = request.mongo.db;
-            const ObjectID = request.mongo.ObjectID;
+                try {
+                    const result = await db.collection('bricks').findOne(
+                        { _id: new ObjectID(request.params.id), claim: { $exists: 1 } },
+                        { _id: 0 }
+                    );
 
-            try {
-                const result = await db.collection('bricks').findOne(
-                    { _id: new ObjectID(request.params.id), claim: { $exists: 1 } },
-                    { _id: 0 }
-                );
-
-                return result;
-            }
-            catch (err) {
-                throw Boom.internal('Internal MongoDB error', err);
-            }
-        },
-        options: {
+                    return result;
+                }
+                catch (err) {
+                    throw Boom.internal('Internal MongoDB error', err);
+                }
+            },
             auth: 'simple',
             response: {
                 schema: brickSchema
@@ -242,26 +260,28 @@ const register = function (server, options) {
     server.route({
         method: 'DELETE',
         path: '/v1/bricks/{id}/claim',
+        config: {
+            description: 'Delete a Claim',
+            notes: 'Deletes a claim on a brick',
+            tags: ['api', 'Claim'],
+            handler: async function (request) {
 
-        async handler(request) {
+                const db = request.mongo.db;
+                const ObjectID = request.mongo.ObjectID;
 
-            const db = request.mongo.db;
-            const ObjectID = request.mongo.ObjectID;
+                try {
+                    const result = await db.collection('bricks').findOneAndUpdate(
+                        { _id: new ObjectID(request.params.id) },
+                        { $unset: { claim: '' } },
+                        { returnOriginal: false }
+                    );
 
-            try {
-                const result = await db.collection('bricks').findOneAndUpdate(
-                    { _id: new ObjectID(request.params.id) },
-                    { $unset: { claim: '' } },
-                    { returnOriginal: false }
-                );
-
-                return result.value;
-            }
-            catch (err) {
-                throw Boom.internal('Internal MongoDB error', err);
-            }
-        },
-        options: {
+                    return result.value;
+                }
+                catch (err) {
+                    throw Boom.internal('Internal MongoDB error', err);
+                }
+            },
             auth: 'simple',
             response: {
                 schema: brickSchema
@@ -272,34 +292,36 @@ const register = function (server, options) {
     server.route({
         method: 'GET',
         path: '/v1/bricks/claims',
+        config: {
+            description: 'Get all Claims',
+            notes: 'Gets all bricks with a claim on them',
+            tags: ['api', 'Claim'],
+            handler: async function (request) {
 
-        async handler(request) {
+                const db = request.mongo.db;
+                const { skip, limit } = server.methods.skipLimit(request.query.s, request.query.l);
+                const term = request.query.q || '';
+                let result;
 
-            const db = request.mongo.db;
-            const { skip, limit } = server.methods.skipLimit(request.query.s, request.query.l);
-            const term = request.query.q || '';
-            let result;
+                try {
+                    if (term) {
 
-            try {
-                if (term) {
+                        result = await db.collection('bricks').find({ $and: [
+                            { $text: { $search: term, $caseSensitive: false } },
+                            { claim: { $exists: true }
+                            }] }).skip(skip).limit(limit).toArray();
+                    }
+                    else {
 
-                    result = await db.collection('bricks').find({ $and: [
-                        { $text: { $search: term, $caseSensitive: false } },
-                        { claim: { $exists: true }
-                        }] }).skip(skip).limit(limit).toArray();
+                        result = await db.collection('bricks').find({ claim: { $exists: true } }).skip(skip).limit(limit).toArray();
+                    }
+
+                    return result;
                 }
-                else {
-
-                    result = await db.collection('bricks').find({ claim: { $exists: true } }).skip(skip).limit(limit).toArray();
+                catch (err) {
+                    throw Boom.internal('Internal MongoDB error', err);
                 }
-
-                return result;
-            }
-            catch (err) {
-                throw Boom.internal('Internal MongoDB error', err);
-            }
-        },
-        options: {
+            },
             auth: 'simple',
             validate: {
                 query: {
@@ -317,31 +339,33 @@ const register = function (server, options) {
     server.route({
         method: 'POST',
         path: '/v1/bricks/{id}/approvals',
+        config: {
+            description: 'POST an approval',
+            notes: 'Allows a user to update a brick based on the claim object.',
+            tags: ['api', 'Approval'],
+            handler: async function (request) {
 
-        async handler(request) {
+                const db = request.mongo.db;
+                const ObjectID = request.mongo.ObjectID;
 
-            const db = request.mongo.db;
-            const ObjectID = request.mongo.ObjectID;
+                request.payload.brickId = new ObjectID(request.params.id);
+                request.payload.brick = JSON.parse(request.payload.brick);
+                request.payload.claim = JSON.parse(request.payload.claim);
 
-            request.payload.brickId = new ObjectID(request.params.id);
-            request.payload.brick = JSON.parse(request.payload.brick);
-            request.payload.claim = JSON.parse(request.payload.claim);
+                try {
+                    await db.collection('bricks').updateOne(
+                        { _id: new ObjectID(request.params.id) },
+                        { $set: request.payload.brick, $unset: { claim: '' } }
+                    );
 
-            try {
-                await db.collection('bricks').updateOne(
-                    { _id: new ObjectID(request.params.id) },
-                    { $set: request.payload.brick, $unset: { claim: '' } }
-                );
+                    const result = await db.collection('approvals').insert(request.payload);
 
-                const result = await db.collection('approvals').insert(request.payload);
-
-                return result.ops[0];
-            }
-            catch (err) {
-                throw Boom.internal('Internal MongoDB error', err);
-            }
-        },
-        options: {
+                    return result.ops[0];
+                }
+                catch (err) {
+                    throw Boom.internal('Internal MongoDB error', err);
+                }
+            },
             auth: 'simple',
             validate: {
                 payload: {
@@ -359,31 +383,33 @@ const register = function (server, options) {
     server.route({
         method: 'GET',
         path: '/v1/bricks/{id}/approvals',
+        config: {
+            description: 'GET all approvals for a brick',
+            notes: 'Gets all Approvals for a brick.',
+            tags: ['api', 'Approval'],
+            handler: async function (request) {
 
-        async handler(request) {
+                const db = request.mongo.db;
+                const ObjectID = request.mongo.ObjectID;
+                const { skip, limit } = server.methods.skipLimit(request.query.s, request.query.l);
+                const term = request.query.q || '';
+                const brickId = new ObjectID(request.params.id);
+                let result;
 
-            const db = request.mongo.db;
-            const ObjectID = request.mongo.ObjectID;
-            const { skip, limit } = server.methods.skipLimit(request.query.s, request.query.l);
-            const term = request.query.q || '';
-            const brickId = new ObjectID(request.params.id);
-            let result;
+                try {
+                    if (term) {
+                        result = await db.collection('approvals').find({ brickId, $text: { $search: term } }).skip(skip).limit(limit).toArray();
+                    }
+                    else {
+                        result = await db.collection('approvals').find({ brickId }).skip(skip).limit(limit).toArray();
+                    }
 
-            try {
-                if (term) {
-                    result = await db.collection('approvals').find({ brickId, $text: { $search: term } }).skip(skip).limit(limit).toArray();
+                    return result;
                 }
-                else {
-                    result = await db.collection('approvals').find({ brickId }).skip(skip).limit(limit).toArray();
+                catch (err) {
+                    throw Boom.internal('Internal MongoDB error', err);
                 }
-
-                return result;
-            }
-            catch (err) {
-                throw Boom.internal('Internal MongoDB error', err);
-            }
-        },
-        options: {
+            },
             auth: 'simple',
             validate: {
                 query: {
@@ -401,23 +427,25 @@ const register = function (server, options) {
     server.route({
         method: 'GET',
         path: '/v1/bricks/{id}/approvals/{approvalId}',
+        config: {
+            description: 'GET a specific brick approval',
+            notes: 'Gets a specific approval for a brick.',
+            tags: ['api', 'Approval'],
+            handler: async function (request) {
 
-        async handler(request) {
+                const db = request.mongo.db;
+                const ObjectID = request.mongo.ObjectID;
+                const approvalId = new ObjectID(request.params.approvalId);
 
-            const db = request.mongo.db;
-            const ObjectID = request.mongo.ObjectID;
-            const approvalId = new ObjectID(request.params.approvalId);
+                try {
+                    const result = await db.collection('approvals').findOne({ _id: approvalId });
 
-            try {
-                const result = await db.collection('approvals').findOne({ _id: approvalId });
-
-                return result;
-            }
-            catch (err) {
-                throw Boom.internal('Internal MongoDB error', err);
-            }
-        },
-        options: {
+                    return result;
+                }
+                catch (err) {
+                    throw Boom.internal('Internal MongoDB error', err);
+                }
+            },
             auth: 'simple',
             response: {
                 schema: approvalSchema
@@ -428,31 +456,33 @@ const register = function (server, options) {
     server.route({
         method: 'GET',
         path: '/v1/bricks/tags',
+        config: {
+            description: 'Get top five tags of bricks.',
+            notes: 'Gets the top five tags of bricks.',
+            tags: ['api', 'Brick'],
+            handler: async function (request) {
 
-        async handler(request) {
+                const db = request.mongo.db;
 
-            const db = request.mongo.db;
+                try {
+                    const result = await db.collection('bricks').aggregate([
+                        { $unwind: '$tags' },
+                        { $group: {
+                            _id: '$tags', count: { $sum: 1 }
+                        } },
+                        { $sort: { tags: -1 } },
+                        { $limit: 5 },
+                        { $project: { _id: 0, tag: '$_id' } },
+                        { $group: { _id: null, tags: { $addToSet: '$tag' } } },
+                        { $project: { _id: 0, tags: 1 } }
+                    ]).toArray();
 
-            try {
-                const result = await db.collection('bricks').aggregate([
-                    { $unwind: '$tags' },
-                    { $group: {
-                        _id: '$tags', count: { $sum: 1 }
-                    } },
-                    { $sort: { tags: -1 } },
-                    { $limit: 5 },
-                    { $project: { _id: 0, tag: '$_id' } },
-                    { $group: { _id: null, tags: { $addToSet: '$tag' } } },
-                    { $project: { _id: 0, tags: 1 } }
-                ]).toArray();
-
-                return result[0].tags;
-            }
-            catch (err) {
-                throw Boom.internal('Internal MongoDB error', err);
-            }
-        },
-        options: {
+                    return result[0].tags;
+                }
+                catch (err) {
+                    throw Boom.internal('Internal MongoDB error', err);
+                }
+            },
             response: {
                 schema: Joi.array().items(Joi.string())
             }
@@ -463,5 +493,5 @@ const register = function (server, options) {
 module.exports = {
     name: 'brickRoutes',
     register,
-    version: '0.0.3'
+    version: '0.0.4'
 };
