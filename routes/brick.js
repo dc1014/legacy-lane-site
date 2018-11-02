@@ -125,6 +125,30 @@ const register = function (server, options) {
     });
 
     server.route({
+        method: 'DELETE',
+        path: '/v1/bricks/{id}',
+        async handler(request) {
+
+            const db = request.mongo.db;
+            const ObjectID = request.mongo.ObjectID;
+
+            try {
+                const result = await db.collection('bricks').deleteOne(
+                    { _id: new ObjectID(request.params.id) },
+                );
+
+                return result;
+            }
+            catch (err) {
+                throw Boom.internal('Internal MongoDB error', err);
+            }
+        },
+        options: {
+            auth: 'simple'
+        }
+    });
+
+    server.route({
         method: 'POST',
         path: '/v1/bricks',
 
