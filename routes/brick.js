@@ -201,7 +201,7 @@ const register = function (server, options) {
                 const db = request.mongo.db;
                 const ObjectID = request.mongo.ObjectID;
 
-                request.payload.ipAdress = request.info.remoteAddress;
+                request.payload.ipAddress = request.info.remoteAddress;
 
                 try {
                     const result = await db.collection('bricks').findOneAndUpdate(
@@ -349,8 +349,7 @@ const register = function (server, options) {
                 const ObjectID = request.mongo.ObjectID;
 
                 request.payload.brickId = new ObjectID(request.params.id);
-                request.payload.brick = JSON.parse(request.payload.brick);
-                request.payload.claim = JSON.parse(request.payload.claim);
+                request.payload.ipAddress = request.info.remoteAddress;
 
                 try {
                     await db.collection('bricks').updateOne(
@@ -368,11 +367,7 @@ const register = function (server, options) {
             },
             auth: 'simple',
             validate: {
-                payload: {
-                    brick: Joi.string(),
-                    user: Joi.string().required(),
-                    claim: Joi.string()
-                }
+                payload: approvalSchema
             },
             response: {
                 schema: approvalSchema
