@@ -57,6 +57,51 @@ const register = function (server, options) {
 
     server.route({
         method: 'GET',
+        path: '/v1/admin/bricks',
+        config: {
+            description: 'Get unredacted bricks',
+            notes: 'Returns an array of unredacted bricks',
+            tags: ['api', 'Brick'],
+            handler: async function (request) {
+
+                const db = request.mongo.db;
+                let result;
+                const term = request.query.q || '';
+                const { skip, limit } = server.methods.skipLimit(request.query.s, request.query.l);
+
+                try {
+                    if (term) {
+                        result = await db.collection('bricks').find({ $or: [{
+                            $text: { $search: term, $caseSensitive: false }
+                        }, { tags: term }]
+                        }).skip(skip).limit(limit).toArray();
+                    }
+                    else {
+                        result = await db.collection('bricks').find().skip(skip).limit(limit).toArray();
+                    }
+
+                    return result;
+                }
+                catch (err) {
+                    throw Boom.internal('Internal MongoDB error', err);
+                }
+            },
+            auth: 'simple',
+            validate: {
+                query: {
+                    l: Joi.number().integer().min(1).max(10).default(10),
+                    s: Joi.number().integer().min(0).default(0),
+                    q: Joi.string().optional()
+                }
+            },
+            response: {
+                schema: Joi.array().items(brickSchema)
+            }
+        }
+    });
+
+    server.route({
+        method: 'GET',
         path: '/v1/bricks/{id}',
         config: {
             description: 'Get Brick',
@@ -75,6 +120,34 @@ const register = function (server, options) {
                     throw Boom.internal('Internal MongoDB error', err);
                 }
             },
+            response: {
+                schema: brickSchema
+            }
+        }
+    });
+
+    server.route({
+        method: 'GET',
+        path: '/v1/admin/bricks/{id}',
+        config: {
+            description: 'Get Unredacted Brick',
+            notes: 'Returns an unredacted brick',
+            tags: ['api', 'Brick'],
+            handler: async function (request) {
+
+                const db = request.mongo.db;
+                const ObjectID = request.mongo.ObjectID;
+
+                try {
+                    const result = await db.collection('bricks').findOne({ _id: new ObjectID(request.params.id) });
+
+                    return result;
+                }
+                catch (err) {
+                    throw Boom.internal('Internal MongoDB error', err);
+                }
+            },
+            auth: 'simple',
             response: {
                 schema: brickSchema
             }
