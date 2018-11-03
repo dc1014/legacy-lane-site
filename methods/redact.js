@@ -4,6 +4,11 @@ const redact = function (brick) {
         delete brick.claim;
     }
 
+    if (brick.phoneNumber) {
+        delete brick.phoneNumber;
+    }
+
+
     if (brick.constituentId) {
         delete brick.constituentId;
     }

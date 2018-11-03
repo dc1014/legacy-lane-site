@@ -21,6 +21,7 @@ const schema = Joi.object().keys({
     long: Joi.number(),
     image: Joi.string().uri({ scheme: /https:*/ }),
     optIn: Joi.boolean(), // redacted
+    phoneNumber: Joi.string(), // redacted
     tags: Joi.array().items(Joi.string()).default([], 'empty tags array') // searchable
 });
 
