@@ -289,7 +289,6 @@ const register = function (server, options) {
                     throw Boom.internal('Internal MongoDB error', err);
                 }
             },
-            auth: 'simple',
             validate: {
                 payload: claimSchema
             },
