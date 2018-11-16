@@ -521,6 +521,21 @@ const register = function (server, options) {
     });
 
     server.route({
+        method: 'POST',
+        path: '/v1/login',
+        config: {
+            description: 'POST a login',
+            notes: 'User logs in.',
+            tags: ['api', 'login'],
+            handler: async function (request) {
+
+                return true;
+            },
+            auth: 'simple'
+        }
+    });
+
+    server.route({
         method: 'GET',
         path: '/v1/bricks/tags',
         config: {
