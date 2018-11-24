@@ -197,6 +197,7 @@ const register = function (server, options) {
                     line3: Joi.string(),
                     long: Joi.number(),
                     optIn: Joi.boolean(),
+                    phoneNumber: Joi.string(),
                     tags: Joi.array().items(Joi.string())
                 }
             },
