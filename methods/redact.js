@@ -62,7 +62,7 @@ const redactMap = function (data, term) {
         ) {
             return redacted;
         }
-    });
+    }).filter((x) => x !== undefined);
 };
 
 module.exports = {
